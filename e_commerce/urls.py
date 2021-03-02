@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
-from product.views import ProductListView, ProductDetailView, ProductFeaturedListView, ProductFeaturedDetailView
+from product.views import ProductListView, ProductDetailView, ProductFeaturedListView, ProductFeaturedDetailView, ProductDetailSlugView
 from .views import home_page, about_page, contact_page, login_page, register_page
 
 urlpatterns = [
@@ -18,6 +18,7 @@ urlpatterns = [
         path('products/<int:pk>', ProductDetailView.as_view()),
         path('featured/', ProductFeaturedListView.as_view()),
         path('featured/<int:pk>/', ProductFeaturedDetailView.as_view()),
+        path('products/<slug:slug>/', ProductDetailSlugView.as_view()),
 ]
 if settings.DEBUG:
     urlpatterns = urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
