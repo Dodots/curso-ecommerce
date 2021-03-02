@@ -4,17 +4,7 @@ from django.http import Http404
 
 from .models import Product
 
-class ProductFeaturedListView(ListView):
-    template_name = "products/list.html"
-    
-    def get_queryset(self, *args, **kwargs):
-        return Product.objects.featured()
-
-class ProductFeaturedDetailView(DetailView):
-    queryset = Product.objects.all().featured()
-    template_name = "products/featured-detail.html"
-
-#Class Based View
+#View que irá listar todos os produtos
 class ProductListView(ListView):
     #traz todos os produtos do banco de dados sem filtrar nada 
     queryset = Product.objects.all()
@@ -25,7 +15,14 @@ class ProductListView(ListView):
         print(context)
         return context
 
-#Class Based View
+#View que irá listar os produtos em destaque 
+class ProductFeaturedListView(ListView):
+    template_name = "products/list.html"
+    
+    def get_queryset(self, *args, **kwargs):
+        return Product.objects.featured()
+
+#View que irá mostrar um unico produto
 class ProductDetailView(DetailView):
     template_name = "products/detail.html"
 
@@ -40,3 +37,8 @@ class ProductDetailView(DetailView):
         if instance is None:
             raise Http404("Esse produto não existe!")
         return instance
+
+#View que irá mostrar um unico produto, mas só se ele estiver em destaque
+class ProductFeaturedDetailView(DetailView):
+    queryset = Product.objects.all().featured()
+    template_name = "products/featured-detail.html"
