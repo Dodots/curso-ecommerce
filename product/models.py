@@ -1,6 +1,8 @@
 from django.db import models
+from .utils import unique_slug_generator
+from django.db.models.signals import pre_save
 
-#Customiznado a função queryset
+#Custom queryset
 class ProductQuerySet(models.query.QuerySet):
     def active(self):
         return self.filter(active = True)
@@ -8,7 +10,7 @@ class ProductQuerySet(models.query.QuerySet):
     def featured(self):
         return self.filter(featured = True, active = True)
 
-#Customizando a classe Manager
+#Custom Manager
 class ProductManager(models.Manager):
     
     def get_queryset(self):
@@ -18,6 +20,7 @@ class ProductManager(models.Manager):
         return self.get_queryset().active()
 
     def featured(self):
+        #return self.get_queryset().filter(featured = True)
         return self.get_queryset().featured()
 
     def get_by_id(self, id):
@@ -29,16 +32,22 @@ class ProductManager(models.Manager):
 # Create your models here.
 class Product(models.Model): #product_category
     title       = models.CharField(max_length=120)
-    slug        = models.SlugField()
+    slug        = models.SlugField(blank = True, unique = True)
     description = models.TextField()
     price       = models.DecimalField(decimal_places=2, max_digits=20, default=100.00)
     image       = models.FileField(upload_to = 'products/', null = True, blank = True)
     featured    = models.BooleanField(default = False)
     active      = models.BooleanField(default = True)
 
-
     objects = ProductManager()
     
     #python 3
     def __str__(self):
         return self.title
+
+
+def product_pre_save_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)
+
+pre_save.connect(product_pre_save_receiver, sender = Product)
