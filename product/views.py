@@ -50,7 +50,11 @@ class ProductDetailSlugView(DetailView):
 
     def get_object(self, *args, **kwargs):
         slug = self.kwargs.get('slug')
-        instance = Product.objects.get(slug = slug, active = True)
-        if instance:
-            return Http404("Não encontrado!")
+        try:
+            instance = Product.objects.get(slug = slug, active = True)
+        except Product.DoesNotExist:
+            raise Http404("Não encontrado!")
+        except Product.MultipleObjectsReturned:
+            qs = Product.objects.filter(slug = slug, active = True)
+            instance =  qs.first()
         return instance

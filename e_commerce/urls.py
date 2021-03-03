@@ -4,9 +4,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from product.views import ProductListView, ProductDetailView, ProductFeaturedListView, ProductFeaturedDetailView, ProductDetailSlugView
-from .views import home_page, about_page, contact_page, login_page, register_page
-
+from .views import (home_page, 
+                    about_page, 
+                    contact_page, 
+                    login_page, 
+                    register_page
+)
 urlpatterns = [
     path('', home_page),
     path('about/', about_page),
