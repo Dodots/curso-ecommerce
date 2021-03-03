@@ -41,11 +41,10 @@ class Product(models.Model): #product_category
 
     objects = ProductManager()
     
-    #python 3
     def __str__(self):
         return self.title
 
-
+# antes de salvar essa função atribui o valor do slug
 def product_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
