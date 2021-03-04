@@ -3,8 +3,7 @@
 {% block content %}
     {{ object.title }} 
     {{ object.description }} 
-    {{ object.image.url }} <br/>
     {% if object.image %}
-        <img src='{{ object.image.url }}' class='img-fluid'/>
+    <a href="{{ object.image.url }}"><img src='{{ object.image.url }}' class='img-fluid'/></a>
     {% endif %}
 {% endblock content %}
