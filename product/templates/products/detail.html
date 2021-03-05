@@ -7,7 +7,7 @@
             <h1>{{ object.title }}</h1>
             {{ object.timestamp|timesince }} atrás
             <h3>{{ "Um título qualquer"|title }}</h3>
-            {{ object.description|linebreaks }} <br/>
+            <p>{{ object.description|linebreaks }}</p>
             {% if object.image %}
                 <img src='{{ object.image.url }}' class='img-fluid'/>
             {% endif %}
