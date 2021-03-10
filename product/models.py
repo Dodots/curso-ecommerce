@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.db import models
 from .utils import unique_slug_generator
 from django.urls import reverse
@@ -10,6 +11,12 @@ class ProductQuerySet(models.query.QuerySet):
 
     def featured(self):
         return self.filter(featured = True, active = True)
+
+    def search(self, query):
+        lookups = (Q(title__contains = query) | 
+                   Q(description__contains = query) | 
+                   Q(price__contains = query))
+        return self.filter(lookups).distinct()
 
 #Custom Manager
 class ProductManager(models.Manager):
@@ -29,6 +36,9 @@ class ProductManager(models.Manager):
         if qs.count() == 1:
             return qs.first()
         return None
+
+    def search(self, query):
+        return self.get_queryset().active().search(query)
 
 # Create your models here.
 class Product(models.Model): #product_category

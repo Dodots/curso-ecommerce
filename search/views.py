@@ -20,5 +20,5 @@ class SearchProductView(ListView):
         result = request.GET
         query = result.get('q', None) # o None é o valor default.
         if query is not None:
-            return Product.objects.filter(title__icontains = query)
+            return Product.objects.search(query)
         return Product.objects.featured() # Se nao tiver pesquisa ele irá trazer todo produto em destaque (featured).
